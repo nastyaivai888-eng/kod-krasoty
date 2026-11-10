@@ -244,7 +244,7 @@ class Handler(BaseHTTPRequestHandler):
                 fontpath = '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'
                 font = ImageFont.truetype(fontpath, 22) if os.path.exists(fontpath) else ImageFont.load_default()
                 y = im.height - 35
-                 draw.text((22, y), watermark, font=font, fill=(35, 65, 55, 65))
+                draw.text((22, y), watermark, font=font, fill=(35, 65, 55, 65))
                 out = io.BytesIO()
                 im.save(out, format='WEBP', quality=78)
                 self.send_data(200, out.getvalue(), 'image/webp'); return
