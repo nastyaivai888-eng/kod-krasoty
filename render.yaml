@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: kod-krasoty-preview
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python server.py
+    envVars:
+      - key: HOST
+        value: 0.0.0.0
+      - key: DEMO_MODE
+        value: "1"
+      - key: ADMIN_PASSWORD
+        generateValue: true
+      - key: PYTHON_VERSION
+        value: 3.11.11
