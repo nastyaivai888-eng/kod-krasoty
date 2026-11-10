@@ -243,8 +243,8 @@ class Handler(BaseHTTPRequestHandler):
                 watermark = 'ЛИЧНЫЙ ДОСТУП • ' + str(r['order_number']) + ' • ' + str(r['customer_name'])[:28]
                 fontpath = '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'
                 font = ImageFont.truetype(fontpath, 22) if os.path.exists(fontpath) else ImageFont.load_default()
-                for y in range(120, im.height, 320):
-                    draw.text((22, y), watermark, font=font, fill=(20, 65, 50, 75))
+                y = im.height - 35
+                 draw.text((22, y), watermark, font=font, fill=(35, 65, 55, 65))
                 out = io.BytesIO()
                 im.save(out, format='WEBP', quality=78)
                 self.send_data(200, out.getvalue(), 'image/webp'); return
