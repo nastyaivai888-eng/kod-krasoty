@@ -98,7 +98,7 @@ class Handler(BaseHTTPRequestHandler):
    if DEMO_MODE:self.send(403,page('Недоступно','<p>В демонстрационном режиме заказы отключены.</p>'));return
    name=f.get('name',[''])[0].strip();contact=f.get('contact',[''])[0].strip()
    if not (2<=len(name)<=80 and 5<=len(contact)<=120):self.send(400,page('Ошибка','<p>Проверь имя и контакт.</p>'));return
-   oid=secrets.token_hex(6).upper();c=conn();c.execute('INSERT INTO orders(id,name,contact,created) VALUES(?,?,?,?)',(oid,name,contact,int(time.time())));c.commit();c.close()
+  oid='КК-'+secrets.token_hex(3).upper();c=conn();c.execute('INSERT INTO orders(id,name,contact,created) VALUES(?,?,?,?)',(oid,name,contact,int(time.time())));c.commit();c.close()
    body=f'<h1>Заявка №{oid}</h1><p>Сумма: <b>4 990 ₸</b>.</p><p>Перед оплатой проверь имя продавца и сумму на странице Kaspi. После оплаты сообщи продавцу номер заявки <b>{oid}</b>. Доступ выдаётся после проверки платежа.</p><p><a class="btn" href="{PAY}" rel="noreferrer">Перейти к Kaspi Pay</a></p><p class="muted">Оплата сама по себе не открывает доступ автоматически. Не оплачивай, если продавец ещё не подтвердил готовность к выдаче.</p>'
    self.send(200,page('Заявка создана',body));return
   if p in ('/admin/approve','/admin/revoke'):
