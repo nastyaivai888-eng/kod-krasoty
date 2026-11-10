@@ -158,11 +158,19 @@ class Handler(BaseHTTPRequestHandler):
         return False
 
     def safe_admin_post(self):
-        origin = self.headers.get('Origin')
-        if origin and origin.rstrip('/') != PUBLIC_BASE_URL:
-            self.send_data(403, b'Forbidden', 'text/plain')
-            return False
+        origin = self.headers.get('Origin', '')
+        expected = urllib.parse.urlsplit(PUBLIC_BASE_URL)
+        if origin:
+            actual = urllib.parse.urlsplit(origin)
+            if (actual.scheme != 'https' or
+                    actual.hostname != expected.hostname or
+                    actual.port not in (None, 443)):
+                print('Admin POST origin mismatch: ' + repr(origin) +
+                      ' expected: ' + repr(PUBLIC_BASE_URL), flush=True)
+                self.send_data(403, b'Forbidden', 'text/plain')
+                return False
         return self.require_admin()
+
 
     def do_GET(self):
         u = urllib.parse.urlsplit(self.path)
