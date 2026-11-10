@@ -239,12 +239,7 @@ class Handler(BaseHTTPRequestHandler):
                         self.send_data(404, b'Not found', 'text/plain'); return
                     pix = doc[i].get_pixmap(matrix=fitz.Matrix(1.35, 1.35), alpha=False)
                     im = Image.frombytes('RGB', (pix.width, pix.height), pix.samples)
-                draw = ImageDraw.Draw(im, 'RGBA')
-                watermark = 'ЛИЧНЫЙ ДОСТУП • ' + str(r['order_number']) + ' • ' + str(r['customer_name'])[:28]
-                fontpath = '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'
-                font = ImageFont.truetype(fontpath, 22) if os.path.exists(fontpath) else ImageFont.load_default()
-                y = im.height - 35
-                draw.text((22, y), watermark, font=font, fill=(35, 65, 55, 65))
+                
                 out = io.BytesIO()
                 im.save(out, format='WEBP', quality=78)
                 self.send_data(200, out.getvalue(), 'image/webp'); return
