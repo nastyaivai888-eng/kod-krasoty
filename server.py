@@ -157,19 +157,31 @@ class Handler(BaseHTTPRequestHandler):
         self.send_data(401, page('Вход', '<h1>Вход администратора</h1>'), extra={'WWW-Authenticate': 'Basic realm="Kod Krasoty Admin"'})
         return False
 
+    
     def safe_admin_post(self):
         origin = self.headers.get('Origin', '')
+        fetch_site = self.headers.get('Sec-Fetch-Site', '')
         expected = urllib.parse.urlsplit(PUBLIC_BASE_URL)
-        if origin:
+
+        if origin and origin != 'null':
             actual = urllib.parse.urlsplit(origin)
-            if (actual.scheme != 'https' or
-                    actual.hostname != expected.hostname or
-                    actual.port not in (None, 443)):
-                print('Admin POST origin mismatch: ' + repr(origin) +
-                      ' expected: ' + repr(PUBLIC_BASE_URL), flush=True)
-                self.send_data(403, b'Forbidden', 'text/plain')
-                return False
+            valid = (
+                actual.scheme == expected.scheme
+                and actual.netloc == expected.netloc
+            )
+        elif origin == 'null':
+            valid = (fetch_site == 'same-origin')
+        else:
+            valid = (fetch_site == 'same-origin')
+
+        if not valid:
+            print('Admin POST blocked: origin=' + repr(origin)
+                  + ' fetch_site=' + repr(fetch_site), flush=True)
+            self.send_data(403, b'Forbidden', 'text/plain')
+            return False
+
         return self.require_admin()
+
 
 
     def do_GET(self):
