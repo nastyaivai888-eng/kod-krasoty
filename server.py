@@ -157,7 +157,6 @@ class Handler(BaseHTTPRequestHandler):
         self.send_data(401, page('Вход', '<h1>Вход администратора</h1>'), extra={'WWW-Authenticate': 'Basic realm="Kod Krasoty Admin"'})
         return False
 
-    
     def safe_admin_post(self):
         origin = self.headers.get('Origin', '')
         fetch_site = self.headers.get('Sec-Fetch-Site', '')
