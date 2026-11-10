@@ -228,7 +228,7 @@ class Handler(BaseHTTPRequestHandler):
                     oid = html.escape(str(r['order_number']))
                     body = '<h1>КОД КРАСОТЫ</h1><p>Персональный доступ: ' + name + ' · заказ ' + oid + '</p><p class="muted">Только для личного чтения. Скриншоты невозможно технически исключить полностью.</p>'
                     for i in range(count):
-                        body += '<p><img loading="lazy" draggable="false" alt="Страница ' + str(i+1) + '" src="/page/' + str(i+1) + '?token=' + urllib.parse.quote(token, safe='') + '"></p>'
+                        body += '<p><img loading="eager" draggable="false" alt="Страница ' + str(i+1) + '" src="/page/' + str(i+1) + '?token=' + urllib.parse.quote(token, safe='') + '"></p>'
                     self.send_data(200, page('Моё руководство', body)); return
                 try:
                     i = int(p.rsplit('/', 1)[1]) - 1
